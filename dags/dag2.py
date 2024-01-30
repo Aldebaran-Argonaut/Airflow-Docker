@@ -559,135 +559,135 @@ def extract_match_results_cbf():
 # coloquei concurrency = 1 por causas da minha maquina nao suportar o processamento em paralelo das task, porem se sua maquina tiver recurso suficinete, acredito que voce possa retirar esse limitador.
 with DAG('dag2', start_date=datetime(2024, 1, 1), schedule_interval=timedelta(days=30), catchup=False, concurrency=1) as dag:
 
-    # task_extract_page_number1 = PythonOperator(task_id='task_extract_page_number1',
-    #                                            python_callable=extract_page_number,
-    #                                            provide_context=True,
-    #                                            op_args=[
-    #                                                'https://www.cbf.com.br/futebol-brasileiro/atletas/campeonato-brasileiro-serie-a/2023?atleta=&page=1&csrt=3199419627270262597'],
-    #                                            )
+    task_extract_page_number1 = PythonOperator(task_id='task_extract_page_number1',
+                                               python_callable=extract_page_number,
+                                               provide_context=True,
+                                               op_args=[
+                                                   'https://www.cbf.com.br/futebol-brasileiro/atletas/campeonato-brasileiro-serie-a/2023?atleta=&page=1&csrt=3199419627270262597'],
+                                               )
 
-    # task_extract_players_informations_cbf = PythonOperator(task_id='task_extract_players_informations_cbf',
-    #                                                        python_callable=extract_players_informations_cbf,
-    #                                                        depends_on_past=True,
-    #                                                        wait_for_downstream=True,
-    #                                                        provide_context=True,
-    #                                                        )
+    task_extract_players_informations_cbf = PythonOperator(task_id='task_extract_players_informations_cbf',
+                                                           python_callable=extract_players_informations_cbf,
+                                                           depends_on_past=True,
+                                                           wait_for_downstream=True,
+                                                           provide_context=True,
+                                                           )
 
-    # task_extract_teams_informations_cbf = PythonOperator(task_id='task_extract_teams_informations_cbf',
-    #                                                      python_callable=extract_teams_informations_cbf,
-    #                                                      provide_context=True,
-    #                                                      )
-    # task_extract_page_number2 = PythonOperator(task_id='task_extract_page_number2',
-    #                                            python_callable=extract_page_number,
-    #                                            provide_context=True,
-    #                                            op_args=[
-    #                                                'https://www.cbf.com.br/a-cbf/arbitragem/relacao-arbitros'],
-    #                                            )
+    task_extract_teams_informations_cbf = PythonOperator(task_id='task_extract_teams_informations_cbf',
+                                                         python_callable=extract_teams_informations_cbf,
+                                                         provide_context=True,
+                                                         )
+    task_extract_page_number2 = PythonOperator(task_id='task_extract_page_number2',
+                                               python_callable=extract_page_number,
+                                               provide_context=True,
+                                               op_args=[
+                                                   'https://www.cbf.com.br/a-cbf/arbitragem/relacao-arbitros'],
+                                               )
 
-    # task_extract_referees_informations_cbf = PythonOperator(task_id='task_extract_referees_informations_cbf',
-    #                                                         python_callable=extract_referees_informations_cbf,
-    #                                                         depends_on_past=True,
-    #                                                         wait_for_downstream=True,
-    #                                                         provide_context=True,
-    #                                                         )
+    task_extract_referees_informations_cbf = PythonOperator(task_id='task_extract_referees_informations_cbf',
+                                                            python_callable=extract_referees_informations_cbf,
+                                                            depends_on_past=True,
+                                                            wait_for_downstream=True,
+                                                            provide_context=True,
+                                                            )
 
-    # task_extract_referees_statistics_cbf = PythonOperator(task_id='task_extract_referees_statistics_cbf',
-    #                                                       python_callable=extract_referees_statistics_cbf,
-    #                                                       provide_context=True,
-    #                                                       )
+    task_extract_referees_statistics_cbf = PythonOperator(task_id='task_extract_referees_statistics_cbf',
+                                                          python_callable=extract_referees_statistics_cbf,
+                                                          provide_context=True,
+                                                          )
 
-    # task_extract_players_statistics_cbf = PythonOperator(task_id='task_extract_players_statistics_cbf',
-    #                                                      python_callable=extract_players_statistics_cbf,
-    #                                                      provide_context=True,
-    #                                                      )
+    task_extract_players_statistics_cbf = PythonOperator(task_id='task_extract_players_statistics_cbf',
+                                                         python_callable=extract_players_statistics_cbf,
+                                                         provide_context=True,
+                                                         )
 
-    # task_extract_match_results_cbf = PythonOperator(task_id='task_extract_match_results_cbf',
-    #                                                 python_callable=extract_match_results_cbf,
-    #                                                 provide_context=True,
-    #                                                 )
+    task_extract_match_results_cbf = PythonOperator(task_id='task_extract_match_results_cbf',
+                                                    python_callable=extract_match_results_cbf,
+                                                    provide_context=True,
+                                                    )
 
-    # task_encryption1 = PythonOperator(
-    #     task_id='task_encryption1',
-    #     python_callable=encryption,
-    #     provide_context=True,
-    #     depends_on_past=True,
-    #     wait_for_downstream=True,
-    #     op_kwargs={
-    #         'source_task_result': '{{ task_instance.xcom_pull(task_ids="task_extract_players_informations_cbf") }}',
-    #         'table': 'relational.players_informations', },
-    # )
+    task_encryption1 = PythonOperator(
+        task_id='task_encryption1',
+        python_callable=encryption,
+        provide_context=True,
+        depends_on_past=True,
+        wait_for_downstream=True,
+        op_kwargs={
+            'source_task_result': '{{ task_instance.xcom_pull(task_ids="task_extract_players_informations_cbf") }}',
+            'table': 'relational.players_informations', },
+    )
 
-    # task_decryption1 = PythonOperator(
-    #     task_id='task_decryption1',
-    #     python_callable=decryption_and_loading,
-    #     provide_context=True,
-    #     depends_on_past=True,
-    #     wait_for_downstream=True,
-    #     op_args=['{{ ti.xcom_pull(task_ids="task_encryption1")}}',
-    #              'relational.players_informations', 'id_players'],
-    # )
+    task_decryption1 = PythonOperator(
+        task_id='task_decryption1',
+        python_callable=decryption_and_loading,
+        provide_context=True,
+        depends_on_past=True,
+        wait_for_downstream=True,
+        op_args=['{{ ti.xcom_pull(task_ids="task_encryption1")}}',
+                 'relational.players_informations', 'id_players'],
+    )
 
-    # task_encryption2 = PythonOperator(
-    #     task_id='task_encryption2',
-    #     python_callable=encryption,
-    #     provide_context=True,
-    #     depends_on_past=True,
-    #     wait_for_downstream=True,
-    #     op_kwargs={
-    #         'source_task_result': '{{ task_instance.xcom_pull(task_ids="task_extract_teams_informations_cbf") }}',
-    #         'table': 'relational.teams_informations', },
-    # )
+    task_encryption2 = PythonOperator(
+        task_id='task_encryption2',
+        python_callable=encryption,
+        provide_context=True,
+        depends_on_past=True,
+        wait_for_downstream=True,
+        op_kwargs={
+            'source_task_result': '{{ task_instance.xcom_pull(task_ids="task_extract_teams_informations_cbf") }}',
+            'table': 'relational.teams_informations', },
+    )
 
-    # task_decryption2 = PythonOperator(
-    #     task_id='task_decryption2',
-    #     python_callable=decryption_and_loading,
-    #     provide_context=True,
-    #     depends_on_past=True,
-    #     wait_for_downstream=True,
-    #     op_args=['{{ ti.xcom_pull(task_ids="task_encryption2")}}',
-    #              'relational.teams_informations', 'id_team'],
-    # )
+    task_decryption2 = PythonOperator(
+        task_id='task_decryption2',
+        python_callable=decryption_and_loading,
+        provide_context=True,
+        depends_on_past=True,
+        wait_for_downstream=True,
+        op_args=['{{ ti.xcom_pull(task_ids="task_encryption2")}}',
+                 'relational.teams_informations', 'id_team'],
+    )
 
-    # task_encryption3 = PythonOperator(
-    #     task_id='task_encryption3',
-    #     python_callable=encryption,
-    #     provide_context=True,
-    #     depends_on_past=True,
-    #     wait_for_downstream=True,
-    #     op_kwargs={
-    #         'source_task_result': '{{ task_instance.xcom_pull(task_ids="task_extract_referees_informations_cbf") }}',
-    #         'table': 'relational.referees_informations', },
-    # )
+    task_encryption3 = PythonOperator(
+        task_id='task_encryption3',
+        python_callable=encryption,
+        provide_context=True,
+        depends_on_past=True,
+        wait_for_downstream=True,
+        op_kwargs={
+            'source_task_result': '{{ task_instance.xcom_pull(task_ids="task_extract_referees_informations_cbf") }}',
+            'table': 'relational.referees_informations', },
+    )
 
-    # task_decryption3 = PythonOperator(
-    #     task_id='task_decryption3',
-    #     python_callable=decryption_and_loading,
-    #     provide_context=True,
-    #     depends_on_past=True,
-    #     wait_for_downstream=True,
-    #     op_args=['{{ ti.xcom_pull(task_ids="task_encryption3")}}',
-    #              'relational.referees_informations', 'id_referees'],
-    # )
-    # task_encryption4 = PythonOperator(
-    #     task_id='task_encryption4',
-    #     python_callable=encryption,
-    #     provide_context=True,
-    #     depends_on_past=True,
-    #     wait_for_downstream=True,
-    #     op_kwargs={
-    #         'source_task_result': '{{ task_instance.xcom_pull(task_ids="task_extract_referees_statistics_cbf") }}',
-    #         'table': 'relational.referees_statistics', },
-    # )
+    task_decryption3 = PythonOperator(
+        task_id='task_decryption3',
+        python_callable=decryption_and_loading,
+        provide_context=True,
+        depends_on_past=True,
+        wait_for_downstream=True,
+        op_args=['{{ ti.xcom_pull(task_ids="task_encryption3")}}',
+                 'relational.referees_informations', 'id_referees'],
+    )
+    task_encryption4 = PythonOperator(
+        task_id='task_encryption4',
+        python_callable=encryption,
+        provide_context=True,
+        depends_on_past=True,
+        wait_for_downstream=True,
+        op_kwargs={
+            'source_task_result': '{{ task_instance.xcom_pull(task_ids="task_extract_referees_statistics_cbf") }}',
+            'table': 'relational.referees_statistics', },
+    )
 
-    # task_decryption4 = PythonOperator(
-    #     task_id='task_decryption4',
-    #     python_callable=decryption_and_loading,
-    #     provide_context=True,
-    #     depends_on_past=True,
-    #     wait_for_downstream=True,
-    #     op_args=['{{ ti.xcom_pull(task_ids="task_encryption4")}}',
-    #              'relational.referees_statistics', 'id_referees_statistics'],
-    # )
+    task_decryption4 = PythonOperator(
+        task_id='task_decryption4',
+        python_callable=decryption_and_loading,
+        provide_context=True,
+        depends_on_past=True,
+        wait_for_downstream=True,
+        op_args=['{{ ti.xcom_pull(task_ids="task_encryption4")}}',
+                 'relational.referees_statistics', 'id_referees_statistics'],
+    )
     task_encryption5 = PythonOperator(
         task_id='task_encryption5',
         python_callable=encryption,
@@ -708,31 +708,31 @@ with DAG('dag2', start_date=datetime(2024, 1, 1), schedule_interval=timedelta(da
         op_args=['{{ ti.xcom_pull(task_ids="task_encryption5")}}',
                  'relational.players_statistics', 'id_players_statistic'],
     )
-    # task_encryption6 = PythonOperator(
-    #     task_id='task_encryption6',
-    #     python_callable=encryption,
-    #     provide_context=True,
-    #     depends_on_past=True,
-    #     wait_for_downstream=True,
-    #     op_kwargs={
-    #         'source_task_result': '{{ task_instance.xcom_pull(task_ids="task_extract_match_results_cbf") }}',
-    #         'table': 'relational.match_results', },
-    # )
+    task_encryption6 = PythonOperator(
+        task_id='task_encryption6',
+        python_callable=encryption,
+        provide_context=True,
+        depends_on_past=True,
+        wait_for_downstream=True,
+        op_kwargs={
+            'source_task_result': '{{ task_instance.xcom_pull(task_ids="task_extract_match_results_cbf") }}',
+            'table': 'relational.match_results', },
+    )
 
-    # task_decryption6 = PythonOperator(
-    #     task_id='task_decryption6',
-    #     python_callable=decryption_and_loading,
-    #     provide_context=True,
-    #     depends_on_past=True,
-    #     wait_for_downstream=True,
-    #     op_args=['{{ ti.xcom_pull(task_ids="task_encryption6")}}',
-    #              'relational.match_results', 'id_match_result'],
-    # )
+    task_decryption6 = PythonOperator(
+        task_id='task_decryption6',
+        python_callable=decryption_and_loading,
+        provide_context=True,
+        depends_on_past=True,
+        wait_for_downstream=True,
+        op_args=['{{ ti.xcom_pull(task_ids="task_encryption6")}}',
+                 'relational.match_results', 'id_match_result'],
+    )
 
-    # task_extract_page_number1 >> task_extract_players_informations_cbf >> task_encryption1 >> task_decryption1
-    # task_extract_teams_informations_cbf >> task_encryption2 >> task_decryption2
-    # task_extract_page_number2 >> task_extract_referees_informations_cbf >> task_encryption3 >> task_decryption3
-    # task_extract_referees_statistics_cbf >> task_encryption4 >> task_decryption4
-    # task_extract_players_statistics_cbf
+    task_extract_page_number1 >> task_extract_players_informations_cbf >> task_encryption1 >> task_decryption1
+    task_extract_teams_informations_cbf >> task_encryption2 >> task_decryption2
+    task_extract_page_number2 >> task_extract_referees_informations_cbf >> task_encryption3 >> task_decryption3
+    task_extract_referees_statistics_cbf >> task_encryption4 >> task_decryption4
+    task_extract_players_statistics_cbf
     task_encryption5 >> task_decryption5
-    # task_extract_match_results_cbf >> task_encryption6 >> task_decryption6
+    task_extract_match_results_cbf >> task_encryption6 >> task_decryption6
