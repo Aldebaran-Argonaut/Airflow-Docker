@@ -66,7 +66,6 @@ def extract_page_number(soup):
 
 # # Functions to encrypt data
 
-
 def encryption(**kwargs):
     ti = kwargs['ti']
     source_task_result = kwargs.get('source_task_result')
@@ -733,6 +732,5 @@ with DAG('dag2', start_date=datetime(2024, 1, 1), schedule_interval=timedelta(da
     task_extract_teams_informations_cbf >> task_encryption2 >> task_decryption2
     task_extract_page_number2 >> task_extract_referees_informations_cbf >> task_encryption3 >> task_decryption3
     task_extract_referees_statistics_cbf >> task_encryption4 >> task_decryption4
-    task_extract_players_statistics_cbf
-    task_encryption5 >> task_decryption5
+    task_extract_players_statistics_cbf >> task_encryption5 >> task_decryption5
     task_extract_match_results_cbf >> task_encryption6 >> task_decryption6
